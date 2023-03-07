@@ -24,7 +24,7 @@ NOTE: The ``neo4j-rake_tasks`` gem used to be included automatically with the ``
 
 ... or to get a specific version
 
-``rake neo4j:install[community-2.2.3,development]``
+``rake neo4j:install[community-5.5.0,development]``
 
 ### Description
 

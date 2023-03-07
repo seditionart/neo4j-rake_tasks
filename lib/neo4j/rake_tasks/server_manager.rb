@@ -183,7 +183,7 @@ module Neo4j
 
       def print_indexes_or_constraints(type)
         url = File.join(server_url, "db/data/schema/#{type}")
-        data = JSON.load(open(url).read).map(&OpenStruct.method(:new))
+        data = JSON.load(URI.open(url).read).map(&OpenStruct.method(:new))
         if data.empty?
           puts "No #{type.to_s.pluralize} found"
           return
@@ -275,7 +275,7 @@ module Neo4j
 
       private
 
-      NEO4J_VERSIONS_URL = 'https://raw.githubusercontent.com/neo4jrb/neo4j-rake_tasks/master/neo4j_versions.yml'
+      NEO4J_VERSIONS_URL = 'https://raw.githubusercontent.com/seditionart/neo4j-rake_tasks/master/neo4j_versions.yml'
 
       def server_version_greater_than_or_equal_to?(version)
         Gem::Version.new(server_version) >= Gem::Version.new(version)
@@ -290,7 +290,7 @@ module Neo4j
         require 'open-uri'
         require 'yaml'
 
-        YAML.load(open(NEO4J_VERSIONS_URL).read)
+        YAML.load(URI.open(NEO4J_VERSIONS_URL).read)
       end
 
       def download_neo4j(version)

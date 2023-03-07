@@ -49,7 +49,7 @@ module Neo4j
         let(:pidfile_path) { path.join('data', 'neo4j-service.pid') }
 
         def server_up(port)
-          open("http://localhost:#{port}/browser/")
+          URI.open("http://localhost:#{port}/browser/")
           true
         rescue Errno::ECONNREFUSED
           false
