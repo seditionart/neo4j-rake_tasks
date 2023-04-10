@@ -120,8 +120,14 @@ module Neo4j
       def config_port!(port)
         puts "Config ports #{port} (HTTP) / #{port - 1} (HTTPS) / #{port - 2} (Bolt)"
 
-        if server_version_greater_than_or_equal_to?('3.1.0')
+        if server_version_greater_than_or_equal_to?('5.0.0')
           # These are not ideal, perhaps...
+          modify_config_file('server.https.enabled' => false,
+                             'server.http.enabled' => true,
+                             'server.http.listen_address' => ":#{port}",
+                             'server.https.listen_address' => ":#{port - 1}",
+                             'server.bolt.listen_address' => ":#{port - 2}")
+        elsif server_version_greater_than_or_equal_to?('3.1.0')
           modify_config_file('dbms.connector.https.enabled' => false,
                              'dbms.connector.http.enabled' => true,
                              'dbms.connector.http.listen_address' => "localhost:#{port}",
