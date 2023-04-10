@@ -117,33 +117,37 @@ module Neo4j
           'dbms.security.auth_enabled' => value)
       end
 
-      def config_port!(port)
-        puts "Config ports #{port} (HTTP) / #{port - 1} (HTTPS) / #{port - 2} (Bolt)"
+      def config_port!(http)
+
+        offset = port - 7474
+        https  = 7473 + offset
+        bold   = 7687 + offset
+
+        puts "Config ports #{http} (HTTP) / #{https} (HTTPS) / #{bolt} (Bolt)"
 
         if server_version_greater_than_or_equal_to?('5.0.0')
-          # These are not ideal, perhaps...
           modify_config_file('server.default_listen_address' => '0.0.0.0',
                              'server.https.enabled' => false,
                              'server.http.enabled' => true,
-                             'server.http.listen_address' => ":#{port}",
-                             'server.https.listen_address' => ":#{port - 1}",
-                             'server.bolt.listen_address' => ":#{port - 2}")
+                             'server.http.listen_address' => ":#{http}",
+                             'server.https.listen_address' => ":#{https}",
+                             'server.bolt.listen_address' => ":#{bolt}")
         elsif server_version_greater_than_or_equal_to?('3.1.0')
           modify_config_file('dbms.connector.https.enabled' => false,
                              'dbms.connector.http.enabled' => true,
-                             'dbms.connector.http.listen_address' => "localhost:#{port}",
-                             'dbms.connector.https.listen_address' => "localhost:#{port - 1}",
-                             'dbms.connector.bolt.listen_address' => "localhost:#{port - 2}")
+                             'dbms.connector.http.listen_address' => "localhost:#{http}",
+                             'dbms.connector.https.listen_address' => "localhost:#{https}",
+                             'dbms.connector.bolt.listen_address' => "localhost:#{bolt}")
         elsif server_version_greater_than_or_equal_to?('3.0.0')
           modify_config_file('dbms.connector.https.enabled' => false,
                              'dbms.connector.http.enabled' => true,
-                             'dbms.connector.http.address' => "localhost:#{port}",
-                             'dbms.connector.https.address' => "localhost:#{port - 1}",
-                             'dbms.connector.bolt.address' => "localhost:#{port - 2}")
+                             'dbms.connector.http.address' => "localhost:#{http}",
+                             'dbms.connector.https.address' => "localhost:#{https}",
+                             'dbms.connector.bolt.address' => "localhost:#{bolt}")
         else
           modify_config_file('org.neo4j.server.webserver.https.enabled' => false,
-                             'org.neo4j.server.webserver.port' => port,
-                             'org.neo4j.server.webserver.https.port' => port - 1)
+                             'org.neo4j.server.webserver.port' => http,
+                             'org.neo4j.server.webserver.https.port' => https)
         end
       end
 
