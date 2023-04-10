@@ -122,7 +122,8 @@ module Neo4j
 
         if server_version_greater_than_or_equal_to?('5.0.0')
           # These are not ideal, perhaps...
-          modify_config_file('server.https.enabled' => false,
+          modify_config_file('server.default_listen_address' => '0.0.0.0',
+                             'server.https.enabled' => false,
                              'server.http.enabled' => true,
                              'server.http.listen_address' => ":#{port}",
                              'server.https.listen_address' => ":#{port - 1}",
