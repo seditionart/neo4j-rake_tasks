@@ -119,9 +119,9 @@ module Neo4j
 
       def config_port!(http)
 
-        offset = port - 7474
+        offset = http - 7474
         https  = 7473 + offset
-        bold   = 7687 + offset
+        bolt   = 7687 + offset
 
         puts "Config ports #{http} (HTTP) / #{https} (HTTPS) / #{bolt} (Bolt)"
 
